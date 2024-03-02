@@ -1,0 +1,31 @@
+version: "3.9"
+name: opentheso
+services:
+  tomcat:
+    image: opentheso/tomcat:$OPENTHESO_VERSION
+    container_name: opentheso_tomcat
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - openthesonet
+  postgres:
+    image: opentheso/postgres
+    container_name: opentheso_postgres
+    environment:
+      - POSTGRES_USER=opentheso
+      - POSTGRES_PASSWORD=opentheso
+      - PGDATA=/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/pgdata
+    networks:
+      - openthesonet
+networks:
+  openthesonet:
+    driver: bridge
+volumes:
+  pg_data:
+
